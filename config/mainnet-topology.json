@@ -1,0 +1,53 @@
+{
+  "Producers": [
+    {
+      "addr": "north-america.relays-new.cardano-mainnet.iohk.io",
+      "port": 3001,
+      "valency": 1,
+      "continent": "North America",
+      "state": "Ohio"
+    },
+    {
+      "addr": "relays-new.cardano-mainnet.iohk.io",
+      "port": 3001,
+      "valency": 1,
+      "continent": "Europe",
+      "state": "DE"
+    },
+    {
+      "addr": "europe.relays-new.cardano-mainnet.iohk.io",
+      "port": 3001,
+      "valency": 2
+    },
+    {
+      "addr": "relay1.apexpool.info",
+      "port": 6000,
+      "valency": 1
+    },
+    {
+      "addr": "relay2.apexpool.info",
+      "port": 6000,
+      "valency": 1
+    },
+    {
+      "addr": "pool.cardanoproxy.com",
+      "port": 31206,
+      "valency": 1
+    },
+    {
+      "addr": "bra-relay.cardanistas.io",
+      "port": 8081,
+      "valency": 1
+    },
+    {
+      "addr": "54.220.20.40",
+      "port": 3002,
+      "valency": 1
+    },
+    {
+      "addr": "relay1.bluecheesestakehouse.com",
+      "port": 5001,
+      "valency": 1
+    }
+  ]
+}
