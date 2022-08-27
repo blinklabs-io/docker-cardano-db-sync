@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
 
-SECRET_DIR=$1
-echo $SECRET_DIR
+__dir=${1}
+echo ${__dir}
 echo "Generating PGPASS file"
-POSTGRES_DB=''${POSTGRES_DB:-$(< ''${SECRET_DIR}/postgres_db)}
-POSTGRES_USER=''${POSTGRES_USER:-$(< ''${SECRET_DIR}/postgres_user)}
-POSTGRES_PASSWORD=''${POSTGRES_PASSWORD:-$(< ''${SECRET_DIR}/postgres_password)}
-echo "''${POSTGRES_HOST}:''${POSTGRES_PORT}:''${POSTGRES_DB}:''${POSTGRES_USER}:''${POSTGRES_PASSWORD}" > /configuration/pgpass
+POSTGRES_DB=${POSTGRES_DB:-$(< ${__dir}/postgres_db)}
+POSTGRES_USER=${POSTGRES_USER:-$(< ${__dir}/postgres_user)}
+POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-$(< ${__dir}/postgres_password)}
+echo "${POSTGRES_HOST}:${POSTGRES_PORT}:${POSTGRES_DB}:${POSTGRES_USER}:${POSTGRES_PASSWORD}" > /configuration/pgpass
 chmod 0600 /configuration/pgpass
