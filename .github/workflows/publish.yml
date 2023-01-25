@@ -42,7 +42,6 @@ jobs:
         with:
           images: |
             ${{ env.IMAGE_NAME }}
-            ghcr.io/${{ env.IMAGE_NAME }}
           flavor: |
             latest=false
             suffix=-amd64
@@ -69,6 +68,9 @@ jobs:
         run: |
           rm -rf /tmp/.buildx-cache
           mv /tmp/.buildx-cache-new /tmp/.buildx-cache
+      - run: docker pull ${{ steps.meta.outputs.tags }}
+      - run: docker tag ${{ steps.meta.outputs.tags }} ghcr.io/${{ steps.meta.outputs.tags }}
+      - run: docker push ghcr.io/${{ steps.meta.outputs.tags }}
 
   build-arm64:
     runs-on: self-hosted
@@ -100,7 +102,6 @@ jobs:
         with:
           images: |
             ${{ env.IMAGE_NAME }}
-            ghcr.io/${{ env.IMAGE_NAME }}
           flavor: |
             latest=false
             suffix=-arm64v8
@@ -127,6 +128,9 @@ jobs:
         run: |
           rm -rf /tmp/.buildx-cache
           mv /tmp/.buildx-cache-new /tmp/.buildx-cache
+      - run: docker pull ${{ steps.meta.outputs.tags }}
+      - run: docker tag ${{ steps.meta.outputs.tags }} ghcr.io/${{ steps.meta.outputs.tags }}
+      - run: docker push ghcr.io/${{ steps.meta.outputs.tags }}
 
   multi-arch-manifest:
     runs-on: ubuntu-latest
