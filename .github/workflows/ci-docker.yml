@@ -7,7 +7,7 @@ on:
 
 env:
   REGISTRY: ghcr.io
-  IMAGE_NAME: cloudstruct/cardano-db-sync
+  IMAGE_NAME: blinklabs/cardano-db-sync
 
 jobs:
   build-amd64:
