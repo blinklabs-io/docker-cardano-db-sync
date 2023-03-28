@@ -71,7 +71,7 @@ RUN git clone https://github.com/bitcoin-core/secp256k1 && \
 
 FROM builder as cardano-db-sync-build
 # Install cardano-db-sync
-ARG DBSYNC_VERSION=13.1.0.0
+ARG DBSYNC_VERSION=13.1.0.1
 ENV DBSYNC_VERSION=${DBSYNC_VERSION}
 RUN echo "Building tags/${DBSYNC_VERSION}..." \
     && echo tags/${DBSYNC_VERSION} > /CARDANO_BRANCH \
