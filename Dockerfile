@@ -71,7 +71,7 @@ RUN git clone https://github.com/bitcoin-core/secp256k1 && \
 
 FROM builder as cardano-db-sync-build
 # Install cardano-db-sync
-ARG DBSYNC_VERSION=13.1.0.0
+ARG DBSYNC_VERSION=13.1.0.2
 ENV DBSYNC_VERSION=${DBSYNC_VERSION}
 RUN echo "Building tags/${DBSYNC_VERSION}..." \
     && echo tags/${DBSYNC_VERSION} > /CARDANO_BRANCH \
@@ -80,14 +80,15 @@ RUN echo "Building tags/${DBSYNC_VERSION}..." \
     && git fetch --all --recurse-submodules --tags \
     && git tag \
     && git checkout tags/${DBSYNC_VERSION} \
-    && cabal configure --with-compiler=ghc-$GHC_VERSION \
+    && cabal update \
+    && cabal configure --with-compiler=ghc-${GHC_VERSION} \
     && cabal build cardano-db-sync \
     && mkdir -p /root/.local/bin/ \
-    && cp -p dist-newstyle/build/$(uname -m)-linux/ghc-$GHC_VERSION/cardano-db-sync-${DBSYNC_VERSION}/build/cardano-db-sync/cardano-db-sync /root/.local/bin/ \
+    && cp -p dist-newstyle/build/$(uname -m)-linux/ghc-${GHC_VERSION}/cardano-db-sync-${DBSYNC_VERSION}/build/cardano-db-sync/cardano-db-sync /root/.local/bin/ \
     && rm -rf /root/.cabal/packages \
-    && rm -rf /usr/local/lib/ghc-8.10.7/ /usr/local/share/doc/ghc-8.10.7/ \
+    && rm -rf /usr/local/lib/ghc-${GHC_VERSION}/ /usr/local/share/doc/ghc-${GHC_VERSION}/ \
     && rm -rf /code/cardano-db-sync/dist-newstyle/ \
-    && rm -rf /root/.cabal/store/ghc-8.10.7
+    && rm -rf /root/.cabal/store/ghc-${GHC_VERSION}
 
 FROM debian:stable-slim as cardano-db-sync
 ENV LD_LIBRARY_PATH="/usr/local/lib:$LD_LIBRARY_PATH"
