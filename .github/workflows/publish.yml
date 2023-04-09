@@ -50,6 +50,8 @@ jobs:
           tags: |
             # Only version, no revision
             type=match,pattern=v(.*)-(.*),group=1
+            # Full version, with revision
+            type=match,pattern=v(.*),group=1
             # branch
             type=ref,event=branch
             # semver
