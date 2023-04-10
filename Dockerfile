@@ -3,6 +3,7 @@ RUN apt-get update && apt-get install -y libpq-dev
 # Install cardano-db-sync
 ARG DBSYNC_VERSION=13.1.0.2
 ENV DBSYNC_VERSION=${DBSYNC_VERSION}
+ENV DBTOOL_VERSION=${DBTOOL_VERSION}
 RUN echo "Building tags/${DBSYNC_VERSION}..." \
     && echo tags/${DBSYNC_VERSION} > /CARDANO_BRANCH \
     && git clone https://github.com/input-output-hk/cardano-db-sync.git \
@@ -13,8 +14,10 @@ RUN echo "Building tags/${DBSYNC_VERSION}..." \
     && cabal update \
     && cabal configure --with-compiler=ghc-${GHC_VERSION} \
     && cabal build cardano-db-sync \
+    && cabal build cardano-db-tool \
     && mkdir -p /root/.local/bin/ \
     && cp -p dist-newstyle/build/$(uname -m)-linux/ghc-${GHC_VERSION}/cardano-db-sync-${DBSYNC_VERSION}/build/cardano-db-sync/cardano-db-sync /root/.local/bin/ \
+    && cp -p dist-newstyle/build/$(uname -m)-linux/ghc-${GHC_VERSION}/cardano-db-tool-${DBSYNC_VERSION}/x/cardano-db-tool/build/cardano-db-tool/cardano-db-tool /root/.local/bin/ \
     && rm -rf /root/.cabal/packages \
     && rm -rf /usr/local/lib/ghc-${GHC_VERSION}/ /usr/local/share/doc/ghc-${GHC_VERSION}/ \
     && rm -rf /code/cardano-db-sync/dist-newstyle/ \
