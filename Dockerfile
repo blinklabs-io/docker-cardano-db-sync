@@ -1,4 +1,4 @@
-FROM ghcr.io/blinklabs-io/haskell:8.10.7-3.6.2.0 as cardano-db-sync-build
+FROM ghcr.io/blinklabs-io/haskell:8.10.7-3.6.2.0-4 as cardano-db-sync-build
 RUN apt-get update && apt-get install -y libpq-dev
 # Install cardano-db-sync
 ARG DBSYNC_VERSION=13.1.0.2
@@ -23,7 +23,7 @@ RUN echo "Building tags/${DBSYNC_VERSION}..." \
     && rm -rf /code/cardano-db-sync/dist-newstyle/ \
     && rm -rf /root/.cabal/store/ghc-${GHC_VERSION}
 
-FROM debian:stable-slim as cardano-db-sync
+FROM debian:bookworm-slim as cardano-db-sync
 ENV LD_LIBRARY_PATH="/usr/local/lib:$LD_LIBRARY_PATH"
 ENV PKG_CONFIG_PATH="/usr/local/lib/pkgconfig:$PKG_CONFIG_PATH"
 COPY --from=cardano-db-sync-build /usr/local/lib/ /usr/local/lib/
@@ -34,14 +34,14 @@ COPY bin/ /bin/
 COPY config/ /opt/cardano/config/
 RUN apt-get update -y && \
   apt-get install -y \
-    libffi7 \
+    libffi8 \
     libgmp10 \
     libncursesw5 \
     libnuma1 \
     libsystemd0 \
-    libssl1.1 \
+    libssl3 \
     libtinfo6 \
-    llvm-11-runtime \
+    llvm-14-runtime \
     pkg-config \
     postgresql-client \
     zlib1g && \
