@@ -1,8 +1,8 @@
 {
   "EnableLogMetrics": false,
   "EnableLogging": true,
-  "NetworkName": "preprod",
-  "NodeConfigFile": "/opt/cardano/config/preprod-config.json",
+  "NetworkName": "preview",
+  "NodeConfigFile": "config.json",
   "PrometheusPort": 8080,
   "RequiresNetworkMagic": "RequiresMagic",
   "defaultBackends": [

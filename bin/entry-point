@@ -38,7 +38,7 @@ else
 	export CARDANO_NODE_SOCKET_PATH=${CARDANO_NODE_SOCKET_PATH:-/node-ipc/node.socket}
 	mkdir -p log-dir # do we need this?
 	exec cardano-db-sync \
-		--config /opt/cardano/config/${NETWORK}-db-sync-config.json \
+		--config /opt/cardano/config/${NETWORK}/db-sync-config.json \
 		--schema-dir /opt/cardano/schema \
 		--socket-path ${CARDANO_NODE_SOCKET_PATH} \
 		--state-dir /var/lib/cexplorer
