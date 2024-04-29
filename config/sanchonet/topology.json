@@ -1,7 +1,7 @@
 {
   "bootstrapPeers": [
     {
-      "address": "preview-node.play.dev.cardano.org",
+      "address": "sanchonet-node.play.dev.cardano.org",
       "port": 3001
     }
   ],
@@ -19,5 +19,5 @@
       "advertise": false
     }
   ],
-  "useLedgerAfterSlot": 41385503
+  "useLedgerAfterSlot": 21599922
 }
