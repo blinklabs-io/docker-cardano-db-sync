@@ -1,9 +1,9 @@
 FROM ghcr.io/blinklabs-io/haskell:9.6.3-3.10.2.0-1 as cardano-db-sync-build
 RUN apt-get update && apt-get install -y libpq-dev
 # Install cardano-db-sync
-ARG DBSYNC_VERSION=13.2.0.1
+ARG DBSYNC_VERSION=13.2.0.2
 ENV DBSYNC_VERSION=${DBSYNC_VERSION}
-ARG DBSYNC_REF=tags/sancho-4-2-1
+ARG DBSYNC_REF=tags/13.2.0.2
 ENV DBSYNC_REF=${DBSYNC_REF}
 RUN echo "Building ${DBSYNC_REF}..." \
     && echo ${DBSYNC_REF} > /CARDANO_DB_SYNC_REF \
@@ -11,7 +11,7 @@ RUN echo "Building ${DBSYNC_REF}..." \
     && cd cardano-db-sync\
     && git fetch --all --recurse-submodules --tags \
     && git tag \
-    && git checkout ${DBSYNC_8REF} \
+    && git checkout ${DBSYNC_REF} \
     && cabal update \
     && cabal configure --with-compiler=ghc-${GHC_VERSION} \
     && cabal build cardano-db-sync \
