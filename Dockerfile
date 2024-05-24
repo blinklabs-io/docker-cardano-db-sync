@@ -24,6 +24,8 @@ RUN echo "Building ${DBSYNC_REF}..." \
     && rm -rf /code/cardano-db-sync/dist-newstyle/ \
     && rm -rf /root/.cabal/store/ghc-${GHC_VERSION}
 
+FROM ghcr.io/blinklabs-io/cardano-configs:20240515-2 as cardano-configs
+
 FROM debian:bookworm-slim as cardano-db-sync
 ENV LD_LIBRARY_PATH="/usr/local/lib:$LD_LIBRARY_PATH"
 ENV PKG_CONFIG_PATH="/usr/local/lib/pkgconfig:$PKG_CONFIG_PATH"
@@ -31,8 +33,8 @@ COPY --from=cardano-db-sync-build /usr/local/lib/ /usr/local/lib/
 COPY --from=cardano-db-sync-build /usr/local/include/ /usr/local/include/
 COPY --from=cardano-db-sync-build /root/.local/bin/cardano-* /code/cardano-db-sync/scripts/postgresql-setup.sh /usr/local/bin/
 COPY --from=cardano-db-sync-build /code/cardano-db-sync/schema/ /opt/cardano/schema/
+COPY --from=cardano-configs /config/ /opt/cardano/config/
 COPY bin/ /bin/
-COPY config/ /opt/cardano/config/
 RUN apt-get update -y && \
   apt-get install -y \
     libffi8 \
