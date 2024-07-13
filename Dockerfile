@@ -1,10 +1,12 @@
-FROM ghcr.io/blinklabs-io/haskell:9.6.3-3.10.2.0-1 as cardano-db-sync-build
+FROM ghcr.io/blinklabs-io/haskell:9.6.3-3.10.2.0-1 AS cardano-db-sync-build
 RUN apt-get update && apt-get install -y libpq-dev
 # Install cardano-db-sync
-ARG DBSYNC_VERSION=13.2.0.2
+ARG DBSYNC_VERSION=13.3.0.0
 ENV DBSYNC_VERSION=${DBSYNC_VERSION}
-ARG DBSYNC_REF=tags/13.2.0.2
+ARG DBSYNC_REF=tags/13.3.0.0
 ENV DBSYNC_REF=${DBSYNC_REF}
+ARG DBTOOL_VERSION=13.2.0.2
+ENV DBTOOL_VERSION=${DBTOOL_VERSION}
 RUN echo "Building ${DBSYNC_REF}..." \
     && echo ${DBSYNC_REF} > /CARDANO_DB_SYNC_REF \
     && git clone https://github.com/input-output-hk/cardano-db-sync.git \
@@ -18,15 +20,15 @@ RUN echo "Building ${DBSYNC_REF}..." \
     && cabal build cardano-db-tool \
     && mkdir -p /root/.local/bin/ \
     && cp -p dist-newstyle/build/$(uname -m)-linux/ghc-${GHC_VERSION}/cardano-db-sync-${DBSYNC_VERSION}/build/cardano-db-sync/cardano-db-sync /root/.local/bin/ \
-    && cp -p dist-newstyle/build/$(uname -m)-linux/ghc-${GHC_VERSION}/cardano-db-tool-${DBSYNC_VERSION}/x/cardano-db-tool/build/cardano-db-tool/cardano-db-tool /root/.local/bin/ \
+    && cp -p dist-newstyle/build/$(uname -m)-linux/ghc-${GHC_VERSION}/cardano-db-tool-${DBTOOL_VERSION}/x/cardano-db-tool/build/cardano-db-tool/cardano-db-tool /root/.local/bin/ \
     && rm -rf /root/.cabal/packages \
     && rm -rf /usr/local/lib/ghc-${GHC_VERSION}/ /usr/local/share/doc/ghc-${GHC_VERSION}/ \
     && rm -rf /code/cardano-db-sync/dist-newstyle/ \
     && rm -rf /root/.cabal/store/ghc-${GHC_VERSION}
 
-FROM ghcr.io/blinklabs-io/cardano-configs:20240515-2 as cardano-configs
+FROM ghcr.io/blinklabs-io/cardano-configs:20240515-2 AS cardano-configs
 
-FROM debian:bookworm-slim as cardano-db-sync
+FROM debian:bookworm-slim AS cardano-db-sync
 ENV LD_LIBRARY_PATH="/usr/local/lib:$LD_LIBRARY_PATH"
 ENV PKG_CONFIG_PATH="/usr/local/lib/pkgconfig:$PKG_CONFIG_PATH"
 COPY --from=cardano-db-sync-build /usr/local/lib/ /usr/local/lib/
