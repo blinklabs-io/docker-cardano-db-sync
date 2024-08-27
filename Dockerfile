@@ -1,11 +1,11 @@
 FROM ghcr.io/blinklabs-io/haskell:9.6.3-3.10.2.0-1 AS cardano-db-sync-build
 RUN apt-get update && apt-get install -y libpq-dev
 # Install cardano-db-sync
-ARG DBSYNC_VERSION=13.4.0.0
+ARG DBSYNC_VERSION=13.4.1.0
 ENV DBSYNC_VERSION=${DBSYNC_VERSION}
-ARG DBSYNC_REF=tags/13.4.0.0
+ARG DBSYNC_REF=tags/13.4.1.0
 ENV DBSYNC_REF=${DBSYNC_REF}
-ARG DBTOOL_VERSION=13.4.0.0
+ARG DBTOOL_VERSION=13.4.1.0
 ENV DBTOOL_VERSION=${DBTOOL_VERSION}
 RUN echo "Building ${DBSYNC_REF}..." \
     && echo ${DBSYNC_REF} > /CARDANO_DB_SYNC_REF \
