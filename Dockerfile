@@ -39,6 +39,7 @@ COPY --from=cardano-configs /config/ /opt/cardano/config/
 COPY bin/ /bin/
 RUN apt-get update -y && \
   apt-get install -y \
+    curl \
     libffi8 \
     libgmp10 \
     libncursesw5 \
