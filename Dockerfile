@@ -50,6 +50,7 @@ RUN apt-get update -y && \
     llvm-14-runtime \
     pkg-config \
     postgresql-client \
+    socat \
     zlib1g && \
   chmod +x /usr/local/bin/* && \
   rm -rf /var/lib/apt/lists/*
