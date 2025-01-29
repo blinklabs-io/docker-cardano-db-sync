@@ -3,44 +3,44 @@
 set -e
 mkdir -p /configuration
 if [[ ! -f /configuration/pgpass ]]; then
-	gen-pgpass /run/secrets
+    gen-pgpass /run/secrets
 fi
 export PGPASSFILE=/configuration/pgpass
 mkdir -p -m 1777 /tmp
 set -euo pipefail
+
 if [[ ! -z ${RESTORE_SNAPSHOT:-} ]]; then
-	__base=$(basename ${RESTORE_SNAPSHOT})
-	__mark=${__base}.restored
-	if [[ ! -f ${RESTORED_MARKER} ]]; then
-		if [[ ${RESTORE_SNAPSHOT} =~ ^https://.* ]]; then
-			echo "Downloading snapshot ${RESTORE_SNAPSHOT} ..."
-			curl -LOC - "${RESTORE_SNAPSHOT}"
-			curl -LO "${RESTORE_SNAPSHOT}.sha256sum"
-			sha256sum -c "${__base}.sha256sum"
-			__snap=${__base}
-		else
-			__snap=${RESTORE_SNAPSHOT}
-		fi
-		rm -f /var/lib/cexplorer/*.lstate
-		postgresql-setup.sh --restore-snapshot ${__snap} /var/lib/cexplorer
-		touch ${RESTORED_MARKER}
-		rm -f ${__snap}{,.sha256sum,.asc}
-	fi
+    __base=$(basename "${RESTORE_SNAPSHOT}")
+    __mark="${__base}.restored"
+    if [[ ! -f "${__mark}" ]]; then
+        if [[ "${RESTORE_SNAPSHOT}" =~ ^https://.* ]]; then
+            echo "Downloading snapshot ${RESTORE_SNAPSHOT} ..."
+            curl -LOC - "${RESTORE_SNAPSHOT}"
+            curl -LO "${RESTORE_SNAPSHOT}.sha256sum"
+            sha256sum -c "${__base}.sha256sum"
+            __snap="${__base}"
+        else
+            __snap="${RESTORE_SNAPSHOT}"
+        fi
+        rm -f /var/lib/cexplorer/*.lstate
+        postgresql-setup.sh --restore-snapshot "${__snap}" /var/lib/cexplorer
+        touch "${__mark}"
+        rm -f "${__snap}"{,.sha256sum,.asc}
+    fi
 fi
 
 if [[ -z ${NETWORK} ]]; then
-	echo "Connecting to network specified in configuration.yaml"
-	exec cardano-db-sync \
-		--schema-dir /opt/cardano/schema \
-		--state-dir /var/lib/cexplorer ${@}
+    echo "Connecting to network specified in configuration.yaml"
+    exec cardano-db-sync \
+        --schema-dir /opt/cardano/schema \
+        --state-dir /var/lib/cexplorer "${@}"
 else
-	echo "Connecting to network: ${NETWORK}"
-	export CARDANO_NODE_SOCKET_PATH=${CARDANO_NODE_SOCKET_PATH:-/node-ipc/node.socket}
-	mkdir -p log-dir # do we need this?
-	exec cardano-db-sync \
-		--config /opt/cardano/config/${NETWORK}/db-sync-config.json \
-		--schema-dir /opt/cardano/schema \
-		--socket-path ${CARDANO_NODE_SOCKET_PATH} \
-		--state-dir /var/lib/cexplorer
-
+    echo "Connecting to network: ${NETWORK}"
+    export CARDANO_NODE_SOCKET_PATH="${CARDANO_NODE_SOCKET_PATH:-/node-ipc/node.socket}"
+    mkdir -p log-dir
+    exec cardano-db-sync \
+        --config "/opt/cardano/config/${NETWORK}/db-sync-config.json" \
+        --schema-dir /opt/cardano/schema \
+        --socket-path "${CARDANO_NODE_SOCKET_PATH}" \
+        --state-dir /var/lib/cexplorer
 fi
