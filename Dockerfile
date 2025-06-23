@@ -26,7 +26,7 @@ RUN echo "Building ${DBSYNC_REF}..." \
     && rm -rf /code/cardano-db-sync/dist-newstyle/ \
     && rm -rf /root/.cabal/store/ghc-${GHC_VERSION}
 
-FROM ghcr.io/blinklabs-io/cardano-configs:20250518-1 AS cardano-configs
+FROM ghcr.io/blinklabs-io/cardano-configs:20250618-1 AS cardano-configs
 
 FROM debian:bookworm-slim AS cardano-db-sync
 ENV LD_LIBRARY_PATH="/usr/local/lib:$LD_LIBRARY_PATH"
