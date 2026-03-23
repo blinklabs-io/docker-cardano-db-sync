@@ -20,26 +20,20 @@ jobs:
       packages: write
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2 https://github.com/actions/checkout/releases/tag/v6.0.2
-      - uses: docker/setup-buildx-action@8d2750c68a42422c14e847fe6c8ac0403b4cbd6f # v3.12.0 https://github.com/docker/setup-buildx-action/releases/tag/v3.12.0
+      - uses: docker/setup-buildx-action@4d04d5d9486b7bd6fa91e7baf45bbb4f8b9deedd # v4.0.0 https://github.com/docker/setup-buildx-action/releases/tag/v4.0.0
       - name: Login to Docker Hub
-        uses: docker/login-action@c94ce9fb468520275223c153574b00df6fe4bcc9 # v3.7.0 https://github.com/docker/login-action/releases/tag/v3.7.0
+        uses: docker/login-action@b45d80f862d83dbcd57f89517bcf500b2ab88fb2 # v4.0.0 https://github.com/docker/login-action/releases/tag/v4.0.0
         with:
           username: blinklabs
           password: ${{ secrets.DOCKER_PASSWORD }} # uses token
       - name: Login to GHCR
-        uses: docker/login-action@c94ce9fb468520275223c153574b00df6fe4bcc9 # v3.7.0 https://github.com/docker/login-action/releases/tag/v3.7.0
+        uses: docker/login-action@b45d80f862d83dbcd57f89517bcf500b2ab88fb2 # v4.0.0 https://github.com/docker/login-action/releases/tag/v4.0.0
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
-      - uses: actions/cache@cdf6c1fa76f9f475f3d7449005a359c84ca0f306 # v5.0.3 https://github.com/actions/cache/releases/tag/v5.0.3
-        with:
-          path: /tmp/.buildx-cache
-          key: ${{ runner.os }}-${{ runner.arch }}-buildx-${{ github.sha }}
-          restore-keys: |
-            ${{ runner.os }}-${{ runner.arch }}-buildx-
       - id: meta
-        uses: docker/metadata-action@c299e40c65443455700f0fdfc63efafe5b349051 # v5.10.0 https://github.com/docker/metadata-action/releases/tag/v5.10.0
+        uses: docker/metadata-action@030e881283bb7a6894de51c315a6bfe6a94e05cf # v6.0.0 https://github.com/docker/metadata-action/releases/tag/v6.0.0
         with:
           images: |
             ${{ env.DOCKER_IMAGE_NAME }}
@@ -57,21 +51,14 @@ jobs:
             # semver
             type=semver,pattern={{version}}
       - name: push
-        uses: docker/build-push-action@10e90e3645eae34f1e60eeb005ba3a3d33f178e8 # v6.19.2 https://github.com/docker/build-push-action/releases/tag/v6.19.2
+        uses: docker/build-push-action@d08e5c354a6adb9ed34480a06d141179aa583294 # v7.0.0 https://github.com/docker/build-push-action/releases/tag/v7.0.0
         with:
           context: .
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
-          cache-from: type=local,src=/tmp/.buildx-cache
-          cache-to: type=local,dest=/tmp/.buildx-cache-new,mode=max
-      # TEMP fix
-      # https://github.com/docker/build-push-action/issues/252
-      # https://github.com/moby/buildkit/issues/1896
-      - name: cache
-        run: |
-          rm -rf /tmp/.buildx-cache
-          mv /tmp/.buildx-cache-new /tmp/.buildx-cache
+          cache-from: type=gha,scope=buildkit-amd64
+          cache-to: type=gha,mode=max,scope=buildkit-amd64
       # TEMP fix
       # Something strange is happening with the manifests when we push which
       # breaks the downstream multi-arch-manifest, so pull and push to work
@@ -89,26 +76,20 @@ jobs:
       packages: write
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2 https://github.com/actions/checkout/releases/tag/v6.0.2
-      - uses: docker/setup-buildx-action@8d2750c68a42422c14e847fe6c8ac0403b4cbd6f # v3.12.0 https://github.com/docker/setup-buildx-action/releases/tag/v3.12.0
+      - uses: docker/setup-buildx-action@4d04d5d9486b7bd6fa91e7baf45bbb4f8b9deedd # v4.0.0 https://github.com/docker/setup-buildx-action/releases/tag/v4.0.0
       - name: Login to Docker Hub
-        uses: docker/login-action@c94ce9fb468520275223c153574b00df6fe4bcc9 # v3.7.0 https://github.com/docker/login-action/releases/tag/v3.7.0
+        uses: docker/login-action@b45d80f862d83dbcd57f89517bcf500b2ab88fb2 # v4.0.0 https://github.com/docker/login-action/releases/tag/v4.0.0
         with:
           username: blinklabs
           password: ${{ secrets.DOCKER_PASSWORD }} # uses token
       - name: Login to GHCR
-        uses: docker/login-action@c94ce9fb468520275223c153574b00df6fe4bcc9 # v3.7.0 https://github.com/docker/login-action/releases/tag/v3.7.0
+        uses: docker/login-action@b45d80f862d83dbcd57f89517bcf500b2ab88fb2 # v4.0.0 https://github.com/docker/login-action/releases/tag/v4.0.0
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
-      - uses: actions/cache@cdf6c1fa76f9f475f3d7449005a359c84ca0f306 # v5.0.3 https://github.com/actions/cache/releases/tag/v5.0.3
-        with:
-          path: /tmp/.buildx-cache
-          key: ${{ runner.os }}-${{ runner.arch }}-buildx-${{ github.sha }}
-          restore-keys: |
-            ${{ runner.os }}-${{ runner.arch }}-buildx-
       - id: meta
-        uses: docker/metadata-action@c299e40c65443455700f0fdfc63efafe5b349051 # v5.10.0 https://github.com/docker/metadata-action/releases/tag/v5.10.0
+        uses: docker/metadata-action@030e881283bb7a6894de51c315a6bfe6a94e05cf # v6.0.0 https://github.com/docker/metadata-action/releases/tag/v6.0.0
         with:
           images: |
             ${{ env.DOCKER_IMAGE_NAME }}
@@ -124,21 +105,14 @@ jobs:
             # semver
             type=semver,pattern={{version}}
       - name: push
-        uses: docker/build-push-action@10e90e3645eae34f1e60eeb005ba3a3d33f178e8 # v6.19.2 https://github.com/docker/build-push-action/releases/tag/v6.19.2
+        uses: docker/build-push-action@d08e5c354a6adb9ed34480a06d141179aa583294 # v7.0.0 https://github.com/docker/build-push-action/releases/tag/v7.0.0
         with:
           context: .
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
-          cache-from: type=local,src=/tmp/.buildx-cache
-          cache-to: type=local,dest=/tmp/.buildx-cache-new,mode=max
-      # TEMP fix
-      # https://github.com/docker/build-push-action/issues/252
-      # https://github.com/moby/buildkit/issues/1896
-      - name: cache
-        run: |
-          rm -rf /tmp/.buildx-cache
-          mv /tmp/.buildx-cache-new /tmp/.buildx-cache
+          cache-from: type=gha,scope=buildkit-arm64
+          cache-to: type=gha,mode=max,scope=buildkit-arm64
       # TEMP fix
       # Something strange is happening with the manifests when we push which
       # breaks the downstream multi-arch-manifest, so pull and push to work
@@ -157,21 +131,21 @@ jobs:
       packages: write
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2 https://github.com/actions/checkout/releases/tag/v6.0.2
-      - uses: docker/setup-buildx-action@8d2750c68a42422c14e847fe6c8ac0403b4cbd6f # v3.12.0 https://github.com/docker/setup-buildx-action/releases/tag/v3.12.0
+      - uses: docker/setup-buildx-action@4d04d5d9486b7bd6fa91e7baf45bbb4f8b9deedd # v4.0.0 https://github.com/docker/setup-buildx-action/releases/tag/v4.0.0
       - name: Login to Docker Hub
-        uses: docker/login-action@c94ce9fb468520275223c153574b00df6fe4bcc9 # v3.7.0 https://github.com/docker/login-action/releases/tag/v3.7.0
+        uses: docker/login-action@b45d80f862d83dbcd57f89517bcf500b2ab88fb2 # v4.0.0 https://github.com/docker/login-action/releases/tag/v4.0.0
         with:
           username: blinklabs
           password: ${{ secrets.DOCKER_PASSWORD }} # uses token
       - name: Login to GHCR
-        uses: docker/login-action@c94ce9fb468520275223c153574b00df6fe4bcc9 # v3.7.0 https://github.com/docker/login-action/releases/tag/v3.7.0
+        uses: docker/login-action@b45d80f862d83dbcd57f89517bcf500b2ab88fb2 # v4.0.0 https://github.com/docker/login-action/releases/tag/v4.0.0
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
       - id: meta-dockerhub
         name: Metadata - Docker Hub
-        uses: docker/metadata-action@c299e40c65443455700f0fdfc63efafe5b349051 # v5.10.0 https://github.com/docker/metadata-action/releases/tag/v5.10.0
+        uses: docker/metadata-action@030e881283bb7a6894de51c315a6bfe6a94e05cf # v6.0.0 https://github.com/docker/metadata-action/releases/tag/v6.0.0
         with:
           images: ${{ env.DOCKER_IMAGE_NAME }}
           flavor: |
@@ -185,7 +159,7 @@ jobs:
             type=semver,pattern={{version}}
       - id: meta-dockerhub-tag
         name: Metadata - Docker Hub (Tags)
-        uses: docker/metadata-action@c299e40c65443455700f0fdfc63efafe5b349051 # v5.10.0 https://github.com/docker/metadata-action/releases/tag/v5.10.0
+        uses: docker/metadata-action@030e881283bb7a6894de51c315a6bfe6a94e05cf # v6.0.0 https://github.com/docker/metadata-action/releases/tag/v6.0.0
         with:
           images: |
             ${{ env.DOCKER_IMAGE_NAME }}
@@ -196,7 +170,7 @@ jobs:
             type=match,pattern=v(.*)-(.*),group=1
       - id: meta-ghcr
         name: Metadata - GHCR
-        uses: docker/metadata-action@c299e40c65443455700f0fdfc63efafe5b349051 # v5.10.0 https://github.com/docker/metadata-action/releases/tag/v5.10.0
+        uses: docker/metadata-action@030e881283bb7a6894de51c315a6bfe6a94e05cf # v6.0.0 https://github.com/docker/metadata-action/releases/tag/v6.0.0
         with:
           images: ${{ env.GHCR_IMAGE_NAME }}
           flavor: |
@@ -210,7 +184,7 @@ jobs:
             type=semver,pattern={{version}}
       - id: meta-ghcr-tag
         name: Metadata - GHCR (Tags)
-        uses: docker/metadata-action@c299e40c65443455700f0fdfc63efafe5b349051 # v5.10.0 https://github.com/docker/metadata-action/releases/tag/v5.10.0
+        uses: docker/metadata-action@030e881283bb7a6894de51c315a6bfe6a94e05cf # v6.0.0 https://github.com/docker/metadata-action/releases/tag/v6.0.0
         with:
           images: |
             ${{ env.GHCR_IMAGE_NAME }}
