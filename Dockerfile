@@ -42,10 +42,12 @@ RUN apt-get update -y && \
     curl \
     libffi8 \
     libgmp10 \
+    liblmdb0 \
     libncursesw5 \
     libnuma1 \
-    libsystemd0 \
+    libsnappy1v5 \
     libssl3 \
+    libsystemd0 \
     libtinfo6 \
     liburing2 \
     llvm-14-runtime \
