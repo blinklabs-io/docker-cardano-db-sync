@@ -33,7 +33,7 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
       - id: meta
-        uses: docker/metadata-action@80c7e94dd9b9319bd5eb7a0e0fe9291e23a2a2e9 # v6.1.0 https://github.com/docker/metadata-action/releases/tag/v6.1.0
+        uses: docker/metadata-action@dc802804100637a589fabce1cb79ff13a1411302 # v6.2.0 https://github.com/docker/metadata-action/releases/tag/v6.2.0
         with:
           images: |
             ${{ env.DOCKER_IMAGE_NAME }}
@@ -89,7 +89,7 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
       - id: meta
-        uses: docker/metadata-action@80c7e94dd9b9319bd5eb7a0e0fe9291e23a2a2e9 # v6.1.0 https://github.com/docker/metadata-action/releases/tag/v6.1.0
+        uses: docker/metadata-action@dc802804100637a589fabce1cb79ff13a1411302 # v6.2.0 https://github.com/docker/metadata-action/releases/tag/v6.2.0
         with:
           images: |
             ${{ env.DOCKER_IMAGE_NAME }}
@@ -145,7 +145,7 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
       - id: meta-dockerhub
         name: Metadata - Docker Hub
-        uses: docker/metadata-action@80c7e94dd9b9319bd5eb7a0e0fe9291e23a2a2e9 # v6.1.0 https://github.com/docker/metadata-action/releases/tag/v6.1.0
+        uses: docker/metadata-action@dc802804100637a589fabce1cb79ff13a1411302 # v6.2.0 https://github.com/docker/metadata-action/releases/tag/v6.2.0
         with:
           images: ${{ env.DOCKER_IMAGE_NAME }}
           flavor: |
@@ -159,7 +159,7 @@ jobs:
             type=semver,pattern={{version}}
       - id: meta-dockerhub-tag
         name: Metadata - Docker Hub (Tags)
-        uses: docker/metadata-action@80c7e94dd9b9319bd5eb7a0e0fe9291e23a2a2e9 # v6.1.0 https://github.com/docker/metadata-action/releases/tag/v6.1.0
+        uses: docker/metadata-action@dc802804100637a589fabce1cb79ff13a1411302 # v6.2.0 https://github.com/docker/metadata-action/releases/tag/v6.2.0
         with:
           images: |
             ${{ env.DOCKER_IMAGE_NAME }}
@@ -170,7 +170,7 @@ jobs:
             type=match,pattern=v(.*)-(.*),group=1
       - id: meta-ghcr
         name: Metadata - GHCR
-        uses: docker/metadata-action@80c7e94dd9b9319bd5eb7a0e0fe9291e23a2a2e9 # v6.1.0 https://github.com/docker/metadata-action/releases/tag/v6.1.0
+        uses: docker/metadata-action@dc802804100637a589fabce1cb79ff13a1411302 # v6.2.0 https://github.com/docker/metadata-action/releases/tag/v6.2.0
         with:
           images: ${{ env.GHCR_IMAGE_NAME }}
           flavor: |
@@ -184,7 +184,7 @@ jobs:
             type=semver,pattern={{version}}
       - id: meta-ghcr-tag
         name: Metadata - GHCR (Tags)
-        uses: docker/metadata-action@80c7e94dd9b9319bd5eb7a0e0fe9291e23a2a2e9 # v6.1.0 https://github.com/docker/metadata-action/releases/tag/v6.1.0
+        uses: docker/metadata-action@dc802804100637a589fabce1cb79ff13a1411302 # v6.2.0 https://github.com/docker/metadata-action/releases/tag/v6.2.0
         with:
           images: |
             ${{ env.GHCR_IMAGE_NAME }}
